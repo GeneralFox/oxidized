@@ -16,7 +16,7 @@ Wants=network-online.target
 
 [Service]
 # run at startup with user oxidized 
-# tune your path if needed  
+# tune your path if needed 
 ExecStart=/bin/scl enable rh-ruby23 -- /usr/bin/oxidized
 User=oxidized
 KillSignal=SIGKILL
