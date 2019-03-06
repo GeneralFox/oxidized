@@ -1,0 +1,66 @@
+---
+username: username
+password: password
+model: junos
+resolve_dns: true
+interval: 86400
+use_syslog: false
+log: /home/oxidized/.config/oxidized/logs/oxilog.log
+debug: false
+threads: 30
+timeout: 20
+retries: 3
+#modified regexp removed ^ from standard file 
+prompt: !ruby/regexp /(([\w.@-]+[>#]\s?)$)/
+rest: 127.0.0.1:8888
+next_adds_job: false
+vars: {}
+groups: {}
+models: {}
+pid: "/home/oxidized/.config/oxidized/pid"
+crash:
+  directory: "/home/oxidized/.config/oxidized/crashes"
+  hostnames: false
+stats:
+  history_size: 10
+input:
+  default: ssh, telnet
+  debug: false
+  ssh:
+    secure: false
+  ftp:
+    passive: true
+  utf8_encoded: true
+output:
+  default: git
+  file:
+    directory: "/home/oxidized/router-backup"
+  git:
+    user: oxidized
+    email: rbkp@gllabs.ovh
+    single_repo: true
+    repo: /home/oxidized/.config/oxidized/oxidized.git
+source:
+  default: csv
+  csv:
+    file: /home/oxidized/router.db
+    delimiter: !ruby/regexp /:/
+    map:
+      name: 0
+      ip: 1
+      model: 2
+      username: 3
+      password: 4
+    vars_map:
+      group: 5
+      enable: 6
+model_map:
+  cisco: ios
+  juniper: junos
+hooks:
+  push_to_remote:
+    type: githubrepo
+    events: [node_success, post_store]
+    remote_repo: git@git.gllabs.ovh:oxidized/network-backup.git
+    publickey: /home/oxidized/.ssh/oxidized_pk.pub
+    privatekey: /home/oxidized/.ssh/oxidized_pk
