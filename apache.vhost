@@ -1,0 +1,25 @@
+<VirtualHost *:443>
+        ServerName rbkp.gllabs.ovh
+        ServerAlias oxidized
+        SSLEngine on
+
+        SSLProtocol all -SSLv2 -SSLv3
+        SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!SEED:!IDEA
+
+        SSLCertificateFile /etc/ssl/private/star.gllabs.ovh/star.gllabs.ovh.crt
+        SSLCertificateKeyFile /etc/ssl/private/star.gllabs.ovh/star.gllabs.ovh.key
+        SSLCertificateChainFile /etc/ssl/private/star.gllabs.ovh/ca.crt
+
+        ProxyPass /  http://127.0.0.1:8888/
+        ProxyPassReverse / http://127.0.0.1:8888/
+
+        <Location />
+           AuthType Basic
+           AuthName "Restricted Content"
+           AuthUserFile /etc/httpd/.htpasswd
+           Require valid-user
+        </Location>
+
+        ErrorLog /var/log/httpd/rbkp/error.log
+        CustomLog /var/log/httpd/rbkp/requests.log combined
+</VirtualHost>
